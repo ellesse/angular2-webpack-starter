@@ -39,6 +39,9 @@ const METADATA = {
  */
 module.exports = function (options) {
   isProd = options.env === 'production';
+  tsConfigFile = 'tsconfig.webpack.' +  isProd ? 'prod' : 'dev' + '.json';
+
+
   return {
 
     /*
@@ -103,7 +106,7 @@ module.exports = function (options) {
           test: /\.ts$/,
           use: [
             '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
-            'awesome-typescript-loader?{configFileName: "tsconfig.webpack.json"}',
+            'awesome-typescript-loader?{configFileName: "' + tsConfigFile + '"}',
             'angular2-template-loader',
             {
               loader: 'ng-router-loader',
@@ -327,7 +330,8 @@ module.exports = function (options) {
 
       new ngcWebpack.NgcWebpackPlugin({
         disabled: !AOT,
-        tsConfig: helpers.root('tsconfig.webpack.json'),
+        tsConfig: helpers.root(tsConfigFile),
+        
         resourceOverride: helpers.root('config/resource-override.js')
       })
 
